@@ -64,16 +64,16 @@ class AirQualityApp(App):
         self.mqtt.publish(client_state_topic(MQTT_CLIENT_ID), b"1",
                           qos=2, retain=True)
         # Subscribe to the sensor change notifications from the sensor publishing script.
-        self.mqtt.message_callback_add(TOPIC_SENSOR_CHANGE_NOTIFICATION, self.receive_sensor_data)
+        self.mqtt.message_callback_add(TOPIC_LAMPI_CHANGE_NOTIFICATION, self.receive_sensor_data)
         # Subscribe to the MQTT bridge connection status and association topics.
         self.mqtt.message_callback_add(broker_bridge_connection_topic(),
                                        self.receive_bridge_connection_status)
-        self.mqtt.message_callback_add(TOPIC_AIR_QUALITY_ASSOCIATED,
+        self.mqtt.message_callback_add(TOPIC_LAMPI_ASSOCIATED,
                                        self.receive_associated)
 
         self.mqtt.subscribe(broker_bridge_connection_topic(), qos=1)
-        self.mqtt.subscribe(TOPIC_SENSOR_CHANGE_NOTIFICATION, qos=1)
-        self.mqtt.subscribe(TOPIC_AIR_QUALITY_ASSOCIATED, qos=2)
+        self.mqtt.subscribe(TOPIC_LAMPI_CHANGE_NOTIFICATION, qos=1)
+        self.mqtt.subscribe(TOPIC_LAMPI_ASSOCIATED, qos=2)
 
     def _poll_associated(self, dt):
         # Synchronize changes from MQTT callbacks (in a different thread) to the UI.
@@ -149,8 +149,8 @@ class AirQualityApp(App):
     def update_popup_ip_address(self, instance):
         """Update the popup with the current IP address and device information."""
         interface = "wlan0"
-        ipaddr = lampi.lampi_util.get_ip_address(interface)
-        deviceid = lampi.lampi_util.get_device_id()
+        ipaddr = app.lampi_util.get_ip_address(interface)
+        deviceid = app.lampi_util.get_device_id()
         msg = (
             f"Version: {''}\n"  # Insert version information if needed
             f"{interface}: {ipaddr}\n"
