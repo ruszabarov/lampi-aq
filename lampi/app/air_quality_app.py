@@ -8,12 +8,8 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from paho.mqtt.client import Client
 
-from common import (
-    MQTT_BROKER_HOST, MQTT_BROKER_PORT, MQTT_BROKER_KEEP_ALIVE_SECS,
-    client_state_topic, broker_bridge_connection_topic,
-    TOPIC_SENSOR_CHANGE_NOTIFICATION, TOPIC_AIR_QUALITY_ASSOCIATED
-)
-import lampi.lampi_util
+from air_quality_common import *
+import app.air_quality_util
 
 MQTT_CLIENT_ID = "air_quality_ui"
 
