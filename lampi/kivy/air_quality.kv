@@ -1,0 +1,63 @@
+#:kivy 2.1.0
+
+BoxLayout:
+    orientation: "vertical"
+    padding: dp(20)
+    spacing: dp(10)
+
+    # Header
+    Label:
+        text: "Air Quality Monitor"
+        size_hint_y: None
+        height: dp(50)
+        font_size: "24sp"
+        bold: True
+
+    # GridLayout to display sensor readings
+    GridLayout:
+        cols: 2
+        row_force_default: True
+        row_default_height: dp(40)
+        spacing: dp(10)
+
+        Label:
+            text: "PM 1.0:"
+            font_size: "20sp"
+        Label:
+            text: str(app.pm1)
+            font_size: "20sp"
+
+        Label:
+            text: "PM 2.5:"
+            font_size: "20sp"
+        Label:
+            text: str(app.pm25)
+            font_size: "20sp"
+
+        Label:
+            text: "PM 10:"
+            font_size: "20sp"
+        Label:
+            text: str(app.pm10)
+            font_size: "20sp"
+
+        Label:
+            text: "Temperature:"
+            font_size: "20sp"
+        Label:
+            text: f"{app.temperature} °C"
+            font_size: "20sp"
+
+        Label:
+            text: "Humidity:"
+            font_size: "20sp"
+        Label:
+            text: f"{app.humidity} %"
+            font_size: "20sp"
+
+        Label:
+            text: "Pressure:"
+            font_size: "20sp"
+        Label:
+            text: f"{app.pressure} hPa"
+            font_size: "20sp"
