@@ -1,0 +1,64 @@
+#:kivy 1.9
+
+<Card>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: dp(80)
+    padding: dp(15)
+    spacing: dp(5)
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # white background
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10,]
+    # Sensor title label
+    Label:
+        text: root.sensor_title
+        font_size: "18sp"
+        bold: True
+        color: 0.2, 0.2, 0.2, 1
+    # Sensor reading label
+    Label:
+        text: root.sensor_reading
+        font_size: "22sp"
+        color: 0.3, 0.3, 0.3, 1
+
+BoxLayout:
+    orientation: "vertical"
+    padding: dp(20)
+    spacing: dp(20)
+    # Optional subtle background for the whole layout
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    # GridLayout to display sensor readings in cards
+    GridLayout:
+        cols: 2
+        spacing: dp(15)
+        row_default_height: dp(80)
+        row_force_default: True
+
+        Card:
+            sensor_title: "PM 1.0"
+            sensor_reading: str(app.pm1)
+        Card:
+            sensor_title: "PM 2.5"
+            sensor_reading: str(app.pm25)
+        Card:
+            sensor_title: "PM 10"
+            sensor_reading: str(app.pm10)
+        Card:
+            sensor_title: "Temp"
+            sensor_reading: f"{app.temperature} °C"
+        Card:
+            sensor_title: "Humidity"
+            sensor_reading: f"{app.humidity} %"
+        Card:
+            sensor_title: "Pressure"
+            sensor_reading: f"{app.pressure} hPa"

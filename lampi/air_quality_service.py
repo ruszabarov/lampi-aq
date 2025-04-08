@@ -4,15 +4,7 @@ import json
 import paho.mqtt.client as mqtt
 import shelve
 
-from air_quality_common import (
-    MQTT_BROKER_HOST,
-    MQTT_BROKER_PORT,
-    MQTT_BROKER_KEEP_ALIVE_SECS,
-    MQTT_VERSION,
-    client_state_topic,
-    TOPIC_SET_SENSOR_DATA,
-    TOPIC_SENSOR_CHANGE_NOTIFICATION
-)
+from air_quality_common import *
 
 # File to store sensor data persistently
 SENSOR_STATE_FILENAME = "sensor_state"

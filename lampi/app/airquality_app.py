@@ -2,18 +2,23 @@ import json
 import pigpio
 
 from kivy.app import App
-from kivy.properties import NumericProperty, BooleanProperty
+from kivy.properties import NumericProperty, BooleanProperty, StringProperty
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from paho.mqtt.client import Client
+from kivy.uix.boxlayout import BoxLayout
+
 
 from air_quality_common import *
 import app.air_quality_util
 
 MQTT_CLIENT_ID = "air_quality_ui"
 
-
+class Card(BoxLayout):
+    sensor_title = StringProperty("")
+    sensor_reading = StringProperty("")
+    
 class AirQualityApp(App):
     # Define sensor properties
     pm1 = NumericProperty(0)       # for PM1.0 readings
