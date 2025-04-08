@@ -2,9 +2,9 @@ import paho.mqtt.client
 
 DEVICE_ID_FILENAME = '/sys/class/net/eth0/address'
 
-TOPIC_SET_SENSOR_DATA = "lamp/set_config"
-TOPIC_LAMPI_CHANGE_NOTIFICATION = "lamp/changed"
-TOPIC_LAMPI_ASSOCIATED = "lamp/associated"
+TOPIC_SET_SENSOR_DATA = "lampi/set_sensor_data"
+TOPIC_LAMPI_CHANGE_NOTIFICATION = "lampi/changed"
+TOPIC_LAMPI_ASSOCIATED = "lampi/associated"
 
 def get_device_id():
     with open(DEVICE_ID_FILENAME) as f:

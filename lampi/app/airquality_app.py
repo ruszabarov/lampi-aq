@@ -13,7 +13,7 @@ from kivy.uix.boxlayout import BoxLayout
 from air_quality_common import *
 import app.air_quality_util
 
-MQTT_CLIENT_ID = "air_quality_ui"
+MQTT_CLIENT_ID = "lampi_ui"
 
 class Card(BoxLayout):
     sensor_title = StringProperty("")
@@ -21,7 +21,6 @@ class Card(BoxLayout):
     
 class AirQualityApp(App):
     # Define sensor properties
-    pm1 = NumericProperty(0)       # for PM1.0 readings
     pm25 = NumericProperty(0)      # for PM2.5 readings
     pm10 = NumericProperty(0)      # for PM10 readings
     temperature = NumericProperty(0)
@@ -115,11 +114,8 @@ class AirQualityApp(App):
         Clock.schedule_once(lambda dt: self._update_ui(new_state), 0.01)
 
     def _update_ui(self, new_state):
-        # Update properties only if they exist in the received data.
-        if 'pm1.0' in new_state:
-            self.pm1 = new_state['pm1.0']
-        if 'pm2.5' in new_state:
-            self.pm25 = new_state['pm2.5']
+        if 'pm25' in new_state:
+            self.pm25 = new_state['pm25']
         if 'pm10' in new_state:
             self.pm10 = new_state['pm10']
         if 'temperature' in new_state:
