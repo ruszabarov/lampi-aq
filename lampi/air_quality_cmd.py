@@ -4,15 +4,9 @@ import sys
 import argparse
 import time
 import paho.mqtt.client as mqtt
-from air_quality_common import (
-    MQTT_BROKER_HOST,
-    MQTT_BROKER_PORT,
-    MQTT_BROKER_KEEP_ALIVE_SECS,
-    TOPIC_SENSOR_CHANGE_NOTIFICATION,
-    TOPIC_SET_SENSOR_DATA
-)
+from air_quality_common import *
 
-MQTT_CLIENT_ID = 'air_quality_cmd'
+MQTT_CLIENT_ID = 'lampi_cmd'
 
 class AirQualityCmd:
     def __init__(self):
@@ -30,9 +24,7 @@ class AirQualityCmd:
         parser = argparse.ArgumentParser(
             description="Update and view the air quality sensor state."
         )
-        parser.add_argument('--pm1_0', type=float, default=None,
-                            help='PM1.0 sensor reading')
-        parser.add_argument('--pm2_5', type=float, default=None,
+        parser.add_argument('--pm25', type=float, default=None,
                             help='PM2.5 sensor reading')
         parser.add_argument('--pm10', type=float, default=None,
                             help='PM10 sensor reading')
@@ -51,23 +43,20 @@ class AirQualityCmd:
         if not self.received_sensor_state:
             print("No sensor state available.")
             return
-        print("PM1.0: {pm1_0}, PM2.5: {pm2_5}, PM10: {pm10}, Temperature: {temperature}, Humidity: {humidity}, Pressure: {pressure}".format(
+        print("PM2.5: {pm25}, PM10: {pm10}, Temperature: {temperature}, Humidity: {humidity}, Pressure: {pressure}".format(
             **self.received_sensor_state
         ))
 
     def on_connect(self, client, userdata, flags, rc):
-        client.message_callback_add(TOPIC_SENSOR_CHANGE_NOTIFICATION,
+        client.message_callback_add(TOPIC_LAMPI_CHANGE_NOTIFICATION,
                                     self._receive_sensor_state)
-        client.subscribe(TOPIC_SENSOR_CHANGE_NOTIFICATION, qos=1)
+        client.subscribe(TOPIC_LAMPI_CHANGE_NOTIFICATION, qos=1)
 
     def update_sensor_state(self):
         args = self.build_argument_parser().parse_args()
 
-        # Update state with any provided sensor values
-        if args.pm1_0 is not None:
-            self.received_sensor_state['pm1_0'] = args.pm1_0
-        if args.pm2_5 is not None:
-            self.received_sensor_state['pm2_5'] = args.pm2_5
+        if args.pm25 is not None:
+            self.received_sensor_state['pm25'] = args.pm25
         if args.pm10 is not None:
             self.received_sensor_state['pm10'] = args.pm10
         if args.temperature is not None:
