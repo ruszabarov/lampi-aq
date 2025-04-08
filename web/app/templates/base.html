@@ -1,0 +1,27 @@
+{% load django_htmx %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{% block title %}Django HTMX App{% endblock %}</title>
+
+		<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+		{% block extra_head %}{% endblock %}
+		{% htmx_script %}
+		{% tailwind_css %}
+	</head>
+	<body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+		<header>
+			<h1> Air Quality Monitor</h1>
+			<nav>
+				<a>Dashboard</a>
+				<a>History</a>
+			</nav>
+		</head>
+		<main class="mx-12">{% block content %}{% endblock %}</main>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+{% for reading in sensor_readings %}
+    <tr>
+        <td>{{ reading.timestamp }}</td>
+        <td>{{ reading.pressure }}</td>
+        <td>{{ reading.temperature }}</td>
+        <td>{{ reading.humidity }}</td>
+        <td>{{ reading.pm25 }}</td>
+        <td>{{ reading.pm10 }}</td>
+    </tr>
+{% endfor %}
+
+{% if sensor_readings.has_next %}
+    <tr hx-get="?page={{ sensor_readings.next_page_number }}" 
+        hx-trigger="revealed" 
+        hx-swap="outerHTML">
+        <!-- Use a full-width empty cell to serve as the sentinel -->
+        <td colspan="6"></td>
+    </tr>
+{% endif %}

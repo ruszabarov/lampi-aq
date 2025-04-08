@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h1 class="text-4xl text-success mb-4">History</h1>
+
+    <div class="flex justify-between items-center mb-4">
+        <!-- Add hx-push-url="true" to the form so the URL is updated with parameters -->
+        <form id="filter-form"
+              hx-get="{{ request.path }}"
+              hx-push-url="true"
+              hx-target="#sensor-readings-rows"
+              hx-trigger="change delay:500ms"
+              class="flex space-x-4">
+            <div>
+                <label for="start_date">From:</label>
+                <input type="date"
+                       id="start_date"
+                       name="start_date"
+                       value="{{ request.GET.start_date|default:'' }}"
+                       class="input input-bordered">
+            </div>
+            <div>
+                <label for="end_date">To:</label>
+                <input type="date"
+                       id="end_date"
+                       name="end_date"
+                       value="{{ request.GET.end_date|default:'' }}"
+                       class="input input-bordered">
+            </div>
+        </form>
+
+        <!-- Also add hx-push-url="true" to the Refresh button and include #filter-form
+             so that all parameters (including page=1) are reflected in the URL. -->
+        <button class="btn"
+                hx-get="{{ request.path }}"
+                hx-push-url="true"
+                hx-include="#filter-form"
+                hx-target="#sensor-readings-rows"
+                hx-swap="outerHTML"
+                hx-on::before-request="document.getElementById('sensor-reading-list').style.opacity = 0.4;"
+                hx-on::after-request="document.getElementById('sensor-reading-list').style.opacity = 1.0;">
+            Refresh Table
+        </button>
+    </div>
+
+    <div id="sensor-reading-list">
+        <div class="overflow-x-auto">
+            <table class="table table-zebra table-pin-rows">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Pressure</th>
+                        <th>Temperature</th>
+                        <th>Humidity</th>
+                        <th>pm25</th>
+                        <th>pm10</th>
+                    </tr>
+                </thead>
+                <tbody id="sensor-readings-rows">
+                    {% include 'partials/sensor-readings-rows.html' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
