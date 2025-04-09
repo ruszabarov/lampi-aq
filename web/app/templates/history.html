@@ -30,8 +30,6 @@
             </div>
         </form>
 
-        <!-- Also add hx-push-url="true" to the Refresh button and include #filter-form
-             so that all parameters (including page=1) are reflected in the URL. -->
         <button class="btn"
                 hx-get="{{ request.path }}"
                 hx-push-url="true"
