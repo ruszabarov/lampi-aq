@@ -146,4 +146,4 @@ profile
 *.moved-aside
 DerivedData
 .idea/
-sensor_state.db
+sensor_state.dbdb.sqlite3

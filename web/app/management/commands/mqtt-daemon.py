@@ -49,7 +49,6 @@ class Command(BaseCommand):
         
         try:
             lampi = Lampi.objects.get(device_id=device_id)
-            user = lampi.user
         except Lampi.DoesNotExist:
             print(f"No Lampi found with device ID {device_id}")
             return
@@ -61,7 +60,7 @@ class Command(BaseCommand):
             humidity=payload.get('humidity'),
             pm25=payload.get('pm25'),
             pm10=payload.get('pm10'),
-            user=user
+            lampi=lampi
         )
         print("Successfully created SensorReading")
 
