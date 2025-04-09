@@ -11,7 +11,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 
 from air_quality_common import *
-import app.air_quality_util
+import app.lampi_util
 
 MQTT_CLIENT_ID = "lampi_ui"
 

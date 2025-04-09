@@ -58,14 +58,9 @@ BoxLayout:
         Card:
             sensor_title: "Humidity"
             sensor_reading: f"{app.humidity} %"
-
-        Widget:
-            size_hint_x: None
-            width: 0  # Invisible spacer to start a new row
-
         Card:
             sensor_title: "Pressure"
             sensor_reading: f"{app.pressure} hPa"
             size_hint_x: None
-            width: self.parent.width - self.parent.spacing[0]
+            width: self.parent.width
 
