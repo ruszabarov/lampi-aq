@@ -66,7 +66,7 @@ class AirQualityService(object):
     def on_connect(self, client, userdata, rc, unknown):
         self._client.publish(client_state_topic(MQTT_CLIENT_ID),
                              "1", qos=2, retain=True)
-        self._client.subscribe(TOPIC_LAMPI_CHANGE_NOTIFICATION, qos=1)
+        self._client.subscribe(TOPIC_SET_SENSOR_DATA, qos=1)
         # Publish current sensor state upon connection.
         self.publish_state()
 
