@@ -5,19 +5,6 @@ import paho.mqtt.publish
 from uuid import uuid4
 import json
 
-class SensorReading(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
-    pressure = models.FloatField()
-    temperature = models.FloatField()
-    humidity = models.FloatField()
-    pm25 = models.FloatField()
-    pm10 = models.FloatField()
-    user = models.ForeignKey(
-		User,
-		on_delete=models.CASCADE,
-		related_name='sensor_readings'
-	)
-
 DEFAULT_USER = 'parked_device_user'
 
 def get_parked_user():
@@ -72,3 +59,17 @@ class Lampi(models.Model):
             hostname="localhost",
             port=50001,
             )
+        
+        
+class SensorReading(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    pressure = models.FloatField()
+    temperature = models.FloatField()
+    humidity = models.FloatField()
+    pm25 = models.FloatField()
+    pm10 = models.FloatField()
+    lampi = models.ForeignKey(
+        Lampi,
+        on_delete=models.CASCADE,
+        related_name='sensor_readings'
+    )

@@ -2,10 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.utils.dateparse import parse_date
+from app.models import SensorReading
 
 @login_required
 def index(request):
-    sensor_readings = request.user.sensor_readings.all().order_by('-timestamp')
+    sensor_readings = SensorReading.objects.filter(
+        lampi__user=request.user
+    ).order_by('-timestamp')
     
     start_date_str = request.GET.get('start_date', '')
     end_date_str = request.GET.get('end_date', '')
