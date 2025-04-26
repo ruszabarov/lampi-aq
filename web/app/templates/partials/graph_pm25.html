@@ -1,0 +1,38 @@
+<div class="card shadow-md">
+  <div class="card-body">
+    <h2 class="card-title">PM₂.₅ (Past 24 Hours)</h2>
+    <canvas id="pm25Chart" width="400" height="200"></canvas>
+  </div>
+	<script>
+		if (window.pm25Chart instanceof Chart) {
+			window.pm25Chart.destroy();
+		}
+		var ctx = document.getElementById('pm25Chart').getContext('2d');
+		var labels = {{ timestamps|safe }};
+		var dataValues = {{ pm25_data|safe }};
+		window.pm25Chart = new Chart(ctx, {
+				type: 'line',
+				data: {
+						labels: labels,
+						datasets: [{
+								label: 'PM₂.₅ (µg/m³)',
+								data: dataValues,
+								fill: false,
+								borderColor: 'rgba(75, 192, 192, 1)',
+								tension: 0.1
+						}]
+				},
+				options: {
+						scales: {
+								x: {
+										type: 'time',
+										time: { unit: 'hour' }
+								},
+								y: {
+										ticks: { callback: v => v + ' µg/m³' }
+								}
+						}
+				}
+		});
+	</script>
+</div>

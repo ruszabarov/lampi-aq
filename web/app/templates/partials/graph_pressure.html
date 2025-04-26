@@ -1,37 +1,40 @@
-<div class="card shadow-md">
+<div class="card shadow-md w-full">
   <div class="card-body">
     <h2 class="card-title">Pressure (Past 24 Hours)</h2>
-    <canvas id="pressureChart" width="400" height="200"></canvas>
+    <canvas id="pressureChart" width="100%" height="200"></canvas>
   </div>
+  <script>
+    // In case a previous chart instance exists, destroy it before re-creating.
+    if (window.pressureChart instanceof Chart) {
+      window.pressureChart.destroy();
+    }
+    var ctx = document.getElementById('pressureChart').getContext('2d');
+    // The server should supply JSON-formatted lists.
+    var labels = {{ timestamps|safe }};
+    var dataValues = {{ pressure_data|safe }};
+    window.pressureChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Pressure',
+                data: dataValues,
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: { unit: 'hour' }
+                }
+            }
+        }
+    });
+  </script>
+  
 </div>
-<script>
-  // In case a previous chart instance exists, destroy it before re-creating.
-  if (window.pressureChart instanceof Chart) {
-    window.pressureChart.destroy();
-  }
-  var ctx = document.getElementById('pressureChart').getContext('2d');
-  // The server should supply JSON-formatted lists.
-  var labels = {{ timestamps|safe }};
-  var dataValues = {{ pressure_data|safe }};
-  window.pressureChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-          labels: labels,
-          datasets: [{
-              label: 'Pressure',
-              data: dataValues,
-              fill: false,
-              borderColor: 'rgba(75, 192, 192, 1)',
-              tension: 0.1
-          }]
-      },
-      options: {
-          scales: {
-              x: {
-                  type: 'time',
-                  time: { unit: 'hour' }
-              }
-          }
-      }
-  });
-</script>

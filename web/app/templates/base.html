@@ -13,16 +13,29 @@
 		{% htmx_script %}
 		{% tailwind_css %}
 	</head>
-	<body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+	<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+		<header class="navbar bg-base-100 shadow-md px-4">
+      <div class="flex-1">
+        <a href="{% url 'dashboard' %}" class="btn btn-ghost normal-case text-xl">Air Quality Monitor</a>
+      </div>
+      <div class="flex-none">
+        <ul class="menu menu-horizontal p-0">
+          <li>
+            <a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active"{% endif %}>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'history' %}" {% if request.resolver_match.url_name == 'history' %}class="active"{% endif %}>
+              History
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+		<main class="mx-12">{% block content %}{% endblock %}</main>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
   	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-		<header>
-			<h1> Air Quality Monitor</h1>
-			<nav>
-				<a>Dashboard</a>
-				<a>History</a>
-			</nav>
-		</head>
-		<main class="mx-12">{% block content %}{% endblock %}</main>
 	</body>
 </html>

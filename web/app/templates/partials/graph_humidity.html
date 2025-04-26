@@ -1,0 +1,38 @@
+<div class="card shadow-md">
+  <div class="card-body">
+    <h2 class="card-title">Humidity (Past 24 Hours)</h2>
+    <canvas id="humidityChart" width="400" height="200"></canvas>
+  </div>
+	<script>
+		if (window.humidityChart instanceof Chart) {
+			window.humidityChart.destroy();
+		}
+		var ctx = document.getElementById('humidityChart').getContext('2d');
+		var labels = {{ timestamps|safe }};
+		var dataValues = {{ humidity_data|safe }};
+		window.humidityChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+						labels: labels,
+						datasets: [{
+								label: 'Humidity',
+								data: dataValues,
+								fill: false,
+								borderColor: 'rgba(54, 162, 235, 1)',
+								tension: 0.1
+						}]
+				},
+				options: {
+						scales: {
+								x: {
+										type: 'time',
+										time: { unit: 'hour' }
+								},
+								y: {
+										ticks: { callback: v => v + '%' }
+								}
+						}
+				}
+		});
+	</script>
+</div>

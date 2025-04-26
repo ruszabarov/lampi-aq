@@ -1,7 +1,7 @@
-<div class="card shadow-md">
+<div class="card shadow-md w-full">
   <div class="card-body">
     <h2 class="card-title">Temperature (Past 24 Hours)</h2>
-    <canvas id="temperatureChart" width="400" height="200"></canvas>
+    <canvas id="temperatureChart" width="100%" height="200"></canvas>
   </div>
 </div>
 <script>
@@ -24,6 +24,8 @@
           }]
       },
       options: {
+          responsive: true,
+          maintainAspectRatio: true,
           scales: {
               x: {
                   type: 'time',
