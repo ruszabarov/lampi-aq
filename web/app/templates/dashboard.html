@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-12 my-4">
+  <h1 class="text-4xl text-success mb-8">Dashboard</h1>
+
+  <!-- Graphs Container -->
+  <div class="grid grid-cols-1 gap-8">
+    <!-- Pressure Graph -->
+    <div id="graph-pressure"
+         hx-get="{% url 'graph_pressure' %}"
+         hx-trigger="load, every 60s"
+         hx-swap="outerHTML">
+      <p class="text-center">Loading Pressure Graph...</p>
+    </div>
+
+    <!-- Temperature Graph -->
+    <div id="graph-temperature"
+         hx-get="{% url 'graph_temperature' %}"
+         hx-trigger="load, every 60s"
+         hx-swap="outerHTML">
+      <p class="text-center">Loading Temperature Graph...</p>
+    </div>
+
+    <!-- Humidity Graph -->
+    <div id="graph-humidity"
+         hx-get="{% url 'graph_humidity' %}"
+         hx-trigger="load, every 60s"
+         hx-swap="outerHTML">
+      <p class="text-center">Loading Humidity Graph...</p>
+    </div>
+
+    <!-- PM2.5 Graph -->
+    <div id="graph-pm25"
+         hx-get="{% url 'graph_pm25' %}"
+         hx-trigger="load, every 60s"
+         hx-swap="outerHTML">
+      <p class="text-center">Loading PM2.5 Graph...</p>
+    </div>
+
+    <!-- PM10 Graph -->
+    <div id="graph-pm10"
+         hx-get="{% url 'graph_pm10' %}"
+         hx-trigger="load, every 60s"
+         hx-swap="outerHTML">
+      <p class="text-center">Loading PM10 Graph...</p>
+    </div>
+  </div>
+
+  <!-- Refresh button to manually update all graphs -->
+  <button class="btn mt-8"
+          onclick="
+            htmx.trigger('#graph-pressure', 'refresh');
+            htmx.trigger('#graph-temperature', 'refresh');
+            htmx.trigger('#graph-humidity', 'refresh');
+            htmx.trigger('#graph-pm25', 'refresh');
+            htmx.trigger('#graph-pm10', 'refresh');
+          ">
+    Refresh Graphs
+  </button>
+</div>
+{% endblock %}
