@@ -1,73 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Sensor Dashboard</h1>
-
-  <form id="filter-form" class="mb-4">
-    <label for="device_id">Device:</label>
-    <select
-      id="device_id"
-      name="device_id"
-      class="input input-bordered"
+  <form>
+    <select 
+      id="select-device" 
+      name="device" 
+      autocomplete="off" 
+      hx-get="{% url 'dashboard' %}"
+      hx-target="#temperature-chart"
     >
-      <option value="">All Devices</option>
-      {% for device in devices %}
-        <option
-          value="{{ device.id }}"
-          {% if request.GET.device_id == device.id|stringformat:"s" %}
-            selected
-          {% endif %}
-        >
-          {{ device.name }}
-        </option>
+      {% for d in devices %}
+        <option value="{{d.device_id}}" {% if device == d %} selected {% endif %}>{{ d }}</option>
       {% endfor %}
     </select>
   </form>
-
-  <div class="grid grid-cols-2 gap-6">
-    <div
-      hx-get="{% url 'pressure_chart' %}"
-      hx-trigger="load, change from:#device_id"
-      hx-include="#device_id"
-      hx-swap="innerHTML"
-    >
-      Loading Pressure…
-    </div>
-
-    <div
-      hx-get="{% url 'temperature_chart' %}"
-      hx-trigger="load, change from:#device_id"
-      hx-include="#device_id"
-      hx-swap="innerHTML"
-    >
-      Loading Temperature…
-    </div>
-
-    <div
-      hx-get="{% url 'humidity_chart' %}"
-      hx-trigger="load, change from:#device_id"
-      hx-include="#device_id"
-      hx-swap="innerHTML"
-    >
-      Loading Humidity…
-    </div>
-
-    <div
-      hx-get="{% url 'pm25_chart' %}"
-      hx-trigger="load, change from:#device_id"
-      hx-include="#device_id"
-      hx-swap="innerHTML"
-    >
-      Loading PM2.5…
-    </div>
-
-    <div
-      hx-get="{% url 'pm10_chart' %}"
-      hx-trigger="load, change from:#device_id"
-      hx-include="#device_id"
-      hx-swap="innerHTML"
-    >
-      Loading PM10…
-    </div>
+  
+  <div id="temperature-chart">
+    {% include 'partials/sensor-readings-plot.html' %}
   </div>
 {% endblock %}

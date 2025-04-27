@@ -1,11 +1,15 @@
-import datetime
-import json
 from django.utils import timezone
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.utils.dateparse import parse_date
 from app.models import Lampi, SensorReading
+from bokeh.models import ColumnDataSource, HoverTool
+from bokeh.embed import components
+from bokeh.plotting import figure
+from math import pi
+from bokeh.layouts import column, gridplot
+
 
 @login_required
 def history(request):
@@ -62,71 +66,86 @@ def history(request):
 
 @login_required
 def dashboard(request):
-  devices = Lampi.objects.filter(user=request.user)
-  return render(request, 'dashboard.html', {'devices': devices})
+    devices = Lampi.objects.filter(user=request.user)
+    device = request.GET.get("device", devices.first().device_id)
 
-def _get_chart_data(user, field_name, device_id=None):
-  qs = SensorReading.objects.filter(lampi__user=user)
-  if device_id and device_id.isdigit():
-    qs = qs.filter(lampi_id=device_id)
-  qs = qs.order_by('-timestamp')
-  data = list(qs.values_list('timestamp', field_name))
-  # reverse so oldest → newest
-  timestamps = [ts.strftime("%Y-%m-%d %H:%M") for ts, _ in reversed(data)]
-  values     = [val for _, val in reversed(data)]
-  return json.dumps(timestamps), json.dumps(values)
+    readings = (
+        SensorReading.objects
+        .filter(lampi=device)
+        .order_by("-timestamp")
+    )
+    timestamps = [r.timestamp for r in readings]
 
-@login_required
-def pressure_chart(request):
-  device_id = request.GET.get('device_id', '')
-  labels, values = _get_chart_data(request.user, 'pressure', device_id)
-  return render(request, 'partials/chart.html', {
-    'chart_id':    'pressureChart',
-    'chart_label': 'Pressure (hPa)',
-    'labels':      labels,
-    'values':      values,
-  })
+    metrics = [
+        ("Temperature", "temperature", "°C", "0.0"),
+        ("Pressure", "pressure", "hPa", "0.0"),
+        ("Humidity", "humidity", "%", "0.0"),
+        ("PM2.5", "pm25", "µg/m³", "0.0"),
+        ("PM10", "pm10", "µg/m³", "0.0"),
+    ]
 
-@login_required
-def temperature_chart(request):
-  device_id = request.GET.get('device_id', '')
-  labels, values = _get_chart_data(request.user, 'temperature', device_id)
-  return render(request, 'partials/chart.html', {
-    'chart_id':    'temperatureChart',
-    'chart_label': 'Temperature (°C)',
-    'labels':      labels,
-    'values':      values,
-  })
+    figs = []
+    for title, field, unit, fmt in metrics:
+        values = [getattr(r, field) for r in readings]
+        cds = ColumnDataSource(data=dict(ts=timestamps, val=values))
 
-@login_required
-def humidity_chart(request):
-  device_id = request.GET.get('device_id', '')
-  labels, values = _get_chart_data(request.user, 'humidity', device_id)
-  return render(request, 'partials/chart.html', {
-    'chart_id':    'humidityChart',
-    'chart_label': 'Humidity (%)',
-    'labels':      labels,
-    'values':      values,
-  })
+        p = figure(
+            height=240,
+            x_axis_type="datetime",
+            toolbar_location=None,
+            sizing_mode="stretch_width",
+        )
 
-@login_required
-def pm25_chart(request):
-  device_id = request.GET.get('device_id', '')
-  labels, values = _get_chart_data(request.user, 'pm25', device_id)
-  return render(request, 'partials/chart.html', {
-    'chart_id':    'pm25Chart',
-    'chart_label': 'PM2.5 (µg/m³)',
-    'labels':      labels,
-    'values':      values,
-  })
+        # minimal styling
+        p.line(
+            source=cds,
+            x="ts",
+            y="val",
+            line_width=2,
+            line_color="#0072B2",
+        )
+        p.outline_line_color = None
+        p.background_fill_color = None
+        p.min_border = 5
 
-@login_required
-def pm10_chart(request):
-  device_id = request.GET.get('device_id', '')
-  labels, values = _get_chart_data(request.user, 'pm10', device_id)
-  return render(request, 'partials/chart.html', {
-    'chart_id':    'pm10Chart',
-    'chart_label': 'PM10 (µg/m³)',
-    'labels':      labels,
-    'values':      values,
-  })
+        # axes
+        for ax in (p.xaxis, p.yaxis):
+            ax.axis_line_color = None
+            ax.major_tick_line_color = None
+            ax.major_label_text_font_size = "9pt"
+            ax.major_label_text_color = "#555"
+
+        p.xaxis.major_label_orientation = pi / 4
+
+        # optional lightweight title
+        p.title.text = f"{title}"
+        p.title.text_font_size = "10pt"
+        p.title.align = "left"
+        p.title.text_color = "#333"
+
+        hover = HoverTool(
+            tooltips=[
+                ("Time", "@ts{%F %T}"),
+                (title, f"@val{{0,{fmt}}}{unit}"),
+            ],
+            formatters={"@ts": "datetime"},
+            mode="vline",
+        )
+        p.add_tools(hover)
+
+        figs.append(p)
+
+    # 2-column responsive grid
+    grid = gridplot(figs, ncols=2, sizing_mode="stretch_width")
+
+    script, div = components(grid)
+    context = {
+        "devices": devices,
+        "device": device,
+        "bokeh_script": script,
+        "bokeh_div": div,
+    }
+
+    template = "partials/sensor-readings-plot.html" if request.htmx \
+               else "dashboard.html"
+    return render(request, template, context)
