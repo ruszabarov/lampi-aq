@@ -15,22 +15,56 @@
 	</head>
 	<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 		<header class="navbar bg-base-100 shadow-md px-4">
-      <div class="flex-1">
-        <a href="{% url 'dashboard' %}" class="btn btn-ghost normal-case text-xl">Air Quality Monitor</a>
+      <!-- left -->
+      <div class="navbar-start">
+        <a
+          href="{% url 'dashboard' %}"
+          class="btn btn-ghost normal-case text-xl"
+        >
+          Air Quality Monitor
+        </a>
       </div>
-      <div class="flex-none">
+
+      <!-- center -->
+      <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal p-0">
           <li>
-            <a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active"{% endif %}>
+            <a
+              href="{% url 'dashboard' %}"
+              {% if request.resolver_match.url_name == 'dashboard' %}
+                class="active"
+              {% endif %}
+            >
               Dashboard
             </a>
           </li>
           <li>
-            <a href="{% url 'history' %}" {% if request.resolver_match.url_name == 'history' %}class="active"{% endif %}>
+            <a
+              href="{% url 'history' %}"
+              {% if request.resolver_match.url_name == 'history' %}
+                class="active"
+              {% endif %}
+            >
               History
             </a>
           </li>
         </ul>
+      </div>
+
+      <!-- right -->
+      <div class="navbar-end">
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-ghost normal-case">
+              Logout
+            </button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-ghost normal-case">
+            Login
+          </a>
+        {% endif %}
       </div>
     </header>
 

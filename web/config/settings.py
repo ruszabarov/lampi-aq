@@ -133,3 +133,6 @@ TAILWIND_APP_NAME = 'theme'
 DEFAULT_USER = 'parked_device_user'
 
 STATIC_ROOT= os.path.join(BASE_DIR, "static")
+
+LOGIN_REDIRECT_URL = '/dashboard'
+LOGOUT_REDIRECT_URL = "/login"
