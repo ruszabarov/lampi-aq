@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_htmx",
-    "tailwind",
-    "theme",
     "app",
 ]
 
@@ -127,8 +125,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-TAILWIND_APP_NAME = 'theme'
 
 DEFAULT_USER = 'parked_device_user'
 

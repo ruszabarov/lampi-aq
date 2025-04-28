@@ -1,0 +1,64 @@
+{% if reading %}
+  <div class="grid grid-cols-2 gap-4">
+    <a href="{% url 'reading_detail' reading.id %}?metric=pressure" class="card bg-base-100 shadow-md border border-base-300 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+      <div class="card-body p-4 text-center">
+        <div class="stat">
+          <div class="stat-title flex items-center justify-center">
+            <span class="text-xl mr-2">🌡️</span> Pressure
+          </div>
+          <div class="stat-value">{{ reading.pressure }} hPa</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="{% url 'reading_detail' reading.id %}?metric=temperature" class="card bg-base-100 shadow-md border border-base-300 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+      <div class="card-body p-4 text-center">
+        <div class="stat">
+          <div class="stat-title flex items-center justify-center">
+            <span class="text-xl mr-2">🔥</span> Temperature
+          </div>
+          <div class="stat-value">{{ reading.temperature }} °C</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="{% url 'reading_detail' reading.id %}?metric=humidity" class="card bg-base-100 shadow-md border border-base-300 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+      <div class="card-body p-4 text-center">
+        <div class="stat">
+          <div class="stat-title flex items-center justify-center">
+            <span class="text-xl mr-2">💧</span> Humidity
+          </div>
+          <div class="stat-value">{{ reading.humidity }}%</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="{% url 'reading_detail' reading.id %}?metric=pm25" class="card bg-base-100 shadow-md border border-base-300 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+      <div class="card-body p-4 text-center">
+        <div class="stat">
+          <div class="stat-title flex items-center justify-center">
+            <span class="text-xl mr-2">🔬</span> PM2.5
+          </div>
+          <div class="stat-value">{{ reading.pm25 }} µg/m³</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="{% url 'reading_detail' reading.id %}?metric=pm10" class="card bg-base-100 shadow-md border border-base-300 col-span-2 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+      <div class="card-body p-4 text-center">
+        <div class="stat">
+          <div class="stat-title flex items-center justify-center">
+            <span class="text-xl mr-2">💨</span> PM10
+          </div>
+          <div class="stat-value">{{ reading.pm10 }} µg/m³</div>
+        </div>
+      </div>
+    </a>
+  </div>
+{% else %}
+  <div class="alert alert-warning shadow-sm mt-4">
+    <div>
+      <span>No readings available for this device.</span>
+    </div>
+  </div>
+{% endif %}

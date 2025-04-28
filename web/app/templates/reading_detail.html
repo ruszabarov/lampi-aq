@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mt-4">
+  <div class="flex items-center justify-between mb-4">
+    <a href="{% url 'index' %}?device={{ reading.lampi.device_id }}" class="btn btn-ghost btn-sm mr-2">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Back
+    </a>
+    <h1 class="text-3xl text-success">
+      {{ metric_name }} Detail for {{ reading.lampi.name }}
+    </h1>
+    <span class="badge badge-accent">{{ reading.timestamp|date:"F j, Y, g:i a" }}</span>
+  </div>
+  
+  <div class="grid grid-cols-1 gap-6">
+    <div class="card bg-base-100 shadow-md border border-base-300">
+      <div class="card-body">
+        <h2 class="card-title mb-4">History Graph</h2>
+        <div class="w-full">
+          {{ bokeh_script|safe }}
+          {{ bokeh_div|safe }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

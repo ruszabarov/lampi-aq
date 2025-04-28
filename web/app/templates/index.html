@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">My Devices</h1>
+
+    <label class="block mb-2" for="device-select">Select device:</label>
+    <select
+      id="device-select"
+      name="device"
+      class="select select-bordered w-full max-w-xs"
+      hx-get="."
+      hx-trigger="change"
+      hx-target="#reading-container"
+      hx-include="#device-select"
+    >
+      {% for d in devices %}
+        <option
+          value="{{ d.device_id }}"
+          {% if device_id == d.device_id %}selected{% endif %}
+        >
+          {{ d }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <div id="reading-container">
+      {% include "partials/sensor-readings-grid.html" %}
+    </div>
+  </div>
+{% endblock %}

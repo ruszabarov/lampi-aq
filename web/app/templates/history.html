@@ -14,21 +14,18 @@
       class="flex space-x-4"
     >
       <div>
-        <label for="device_id">Device:</label>
+        <label for="select-device">Device:</label>
         <select
-          id="device_id"
-          name="device_id"
+          id="select-device"
+          name="device"
           class="input input-bordered"
         >
-          <option value="">All Devices</option>
-          {% for device in devices %}
+          {% for d in devices %}
             <option
-              value="{{ device.id }}"
-              {% if request.GET.device_id == device.id|stringformat:"s" %}
-                selected
-              {% endif %}
+              value="{{ d.device_id }}"
+              {% if device == d %} selected {% endif %}
             >
-              {{ device.name }}
+              {{ d }}
             </option>
           {% endfor %}
         </select>
