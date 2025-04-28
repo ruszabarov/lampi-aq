@@ -10,4 +10,5 @@ urlpatterns = [
 	path('history/', views.history, name='history'),
   path('dashboard/', views.dashboard, name='dashboard'),
   path('reading/<int:reading_id>/', views.reading_detail, name='reading_detail'),
+  path('add/', views.AddLampiView.as_view(), name='add'),
 ]

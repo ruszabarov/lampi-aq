@@ -8,8 +8,12 @@ from bokeh.models import ColumnDataSource, HoverTool
 from bokeh.embed import components
 from bokeh.plotting import figure
 from math import pi
-from bokeh.layouts import column, gridplot
+from bokeh.layouts import gridplot
 from django.http import HttpResponseForbidden
+from django.contrib.auth.mixins import LoginRequiredMixin
+from app.forms import AddLampiForm
+from django.views import generic
+
 
 @login_required
 def index(request):
@@ -272,3 +276,18 @@ def reading_detail(request, reading_id):
     }
     
     return render(request, 'reading_detail.html', context)
+
+class AddLampiView(LoginRequiredMixin, generic.FormView):
+    template_name = 'addlampi.html'
+    form_class = AddLampiForm
+    success_url = ''
+
+    def get_context_data(self, **kwargs):
+        context = super(AddLampiView, self).get_context_data(**kwargs)
+        return context
+
+    def form_valid(self, form):
+        device = form.cleaned_data['device']
+        device.associate_and_publish_associated_msg(self.request.user)
+
+        return super(AddLampiView, self).form_valid(form)
