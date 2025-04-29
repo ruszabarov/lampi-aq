@@ -26,6 +26,7 @@ class AirQualityApp(App):
     temperature = NumericProperty(0)
     humidity = NumericProperty(0)
     pressure = NumericProperty(0)
+    altitude = NumericProperty(0)
 
     # Properties for device status and GPIO monitoring
     device_associated = BooleanProperty(True)
@@ -123,7 +124,9 @@ class AirQualityApp(App):
         if 'humidity' in new_state:
             self.humidity = new_state['humidity']
         if 'pressure' in new_state:
-            self.pressure = new_state['pressure']
+            self.pressure = round(new_state['pressure'])
+        if 'altitude' in new_state:
+            self.altitude = new_state['altitude']
 
     def set_up_gpio_and_device_status_popup(self):
         self.pi = pigpio.pi()
