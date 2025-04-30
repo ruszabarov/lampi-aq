@@ -66,6 +66,7 @@ class SensorReading(models.Model):
     pressure = models.FloatField()
     temperature = models.FloatField()
     humidity = models.FloatField()
+    altitude = models.FloatField()
     pm25 = models.FloatField()
     pm10 = models.FloatField()
     lampi = models.ForeignKey(

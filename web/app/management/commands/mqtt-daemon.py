@@ -58,6 +58,7 @@ class Command(BaseCommand):
             pressure=payload.get('pressure'),
             temperature=payload.get('temperature'),
             humidity=payload.get('humidity'),
+            altitude=payload.get('altitude'),
             pm25=payload.get('pm25'),
             pm10=payload.get('pm10'),
             lampi=lampi

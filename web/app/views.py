@@ -103,6 +103,7 @@ def dashboard(request):
         ("Temperature", "temperature", "°C", "0.0"),
         ("Pressure", "pressure", "hPa", "0.0"),
         ("Humidity", "humidity", "%", "0.0"),
+        ("Altitude", "altitude", "m", "0.0"),
         ("PM2.5", "pm25", "µg/m³", "0.0"),
         ("PM10", "pm10", "µg/m³", "0.0"),
     ]
@@ -190,6 +191,7 @@ def reading_detail(request, reading_id):
         'temperature': {'name': 'Temperature', 'field': 'temperature', 'unit': '°C', 'fmt': '0.0'},
         'pressure': {'name': 'Pressure', 'field': 'pressure', 'unit': 'hPa', 'fmt': '0.0'},
         'humidity': {'name': 'Humidity', 'field': 'humidity', 'unit': '%', 'fmt': '0.0'},
+        'altitude': {'name': 'Altitude', 'field': 'altitude', 'unit': 'm', 'fmt': '0.0'},
         'pm25': {'name': 'PM2.5', 'field': 'PM2.5', 'unit': 'µg/m³', 'fmt': '0.0'},
         'pm10': {'name': 'PM10', 'field': 'PM10', 'unit': 'µg/m³', 'fmt': '0.0'},
     }
