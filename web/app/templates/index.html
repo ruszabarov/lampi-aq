@@ -23,7 +23,13 @@
       {% endfor %}
     </select>
 
-    <div id="reading-container">
+    <div
+      id="reading-container"
+      hx-get="."
+      hx-trigger="every 1s, change from:#device-select"
+      hx-include="#device-select"
+      hx-swap="innerHTML"
+    >
       {% include "partials/sensor-readings-grid.html" %}
     </div>
   </div>
